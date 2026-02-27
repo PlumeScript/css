@@ -1,0 +1,96 @@
+// Plume🪶 - CSS (alpha)
+// Copyright (C) 2026-2026 Erwan Barbedor
+//
+// Check https://github.com/PlumeScript/css
+// for documentation or to report issues.
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, version 3 of the License.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+/// Sanitize css
+/// @param s string
+/// @return string
+macro escapeCSS(s)
+	if type(s) == "number" 
+		$s // String should handle number, but it dont. See Plume issue #549.
+	else
+		$String($s).replace(;, \\3B\s).replace({, \\7B\s).replace(}, \\7D\s)
+	end
+end
+
+/// Convert name to html format
+/// @param s string
+/// @return string
+macro convertName(s)
+	$String($s).replace(([A-Z]), -%1, ?rich).lower()
+end
+
+/// Handle custom types
+/// @param x any
+/// @return string
+macro getType(x)
+	if type(x) == "table"
+		$(x.type? or "table")
+	else
+		$type($x)
+	end
+end
+
+/// New set of CSS rules
+/// @public
+/// @param ...props table
+///		* Notes on props:
+///			*	Values with numerics keys will be inserted as nested rules
+///			*	Values with string keys will be insterted as css property.
+///			*	Property names will be converted from `myCustomProperty` to `my-custom-property`
+/// @return table
+macro css(...props)
+	meta tostring: macro()
+		for name, value in items(props)
+			if getType(value) == "cssVar"
+				set value = var($value)
+			end
+
+			if type(name) == "number"
+				$value
+			else
+				$escapeCSS($convertName($name))\: $escapeCSS($value);
+			end
+		end
+	end
+end
+
+/// New set of CSS rules with a selector
+/// @public
+/// @param selector string
+/// @param ...props table (see css macro)
+/// @return table
+macro Rule(selector, ...props)
+	meta tostring: macro()
+		$selector {$css(...props)}
+	end
+end
+
+/// New CSS variable
+/// @public
+/// @param name string
+/// @return table
+macro var(name)
+	type: cssVar
+	meta tostring: macro()
+		--$name
+	end
+end
+
+Rule: $Rule
+css: $css
+var: $var
