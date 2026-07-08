@@ -1,20 +1,7 @@
-// Plume🪶 - CSS (alpha)
-// Copyright (C) 2026-2026 Erwan Barbedor
-//
-// Check https://github.com/PlumeScript/css
-// for documentation or to report issues.
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, version 3 of the License.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-// See the GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program. If not, see <https://www.gnu.org/licenses/>.
+// This file is part of PlumeCSS🪶 0.1.0
+
+// Copyright © Erwan Barbedor
+// Licensed under the MIT License — see LICENSE for details.
 
 /// Sanitize css
 /// @param s string
