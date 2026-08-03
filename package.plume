@@ -1,20 +1,14 @@
-plumeVersion: b57 (Owl Edition)
+plumeVersion: b61 (Owl Edition)
 name: css
 author: Erwan Barbedor
 description: CSS generator
 version: 0.1.0
 source: github.com/PlumeScript/css
 include: do
-	- **\/*.plume
-	- **\/*.🪶
-	- readme.md
+	- init.plume
 	- LICENSE
-	- logo.svg
 end
 exclude: do 
-	- **/.git\/**
-	- **/.gitignore
-	- **/.gitattribute
-	- **/.env
+	- .gitignore
 end
 required:
