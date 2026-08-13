@@ -3,27 +3,17 @@
 // Copyright © Erwan Barbedor
 // Licensed under the MIT License — see LICENSE for details.
 
-/// Sanitize css
-/// @param s string
-/// @return string
-macro escapeCSS(s)
-	if type(s) == "number" 
-		$s // String should handle number, but it dont. See Plume issue #549.
-	else
-		$String($s).replace(;, \\3B\s).replace({, \\7B\s).replace(}, \\7D\s)
-	end
+// Sanitize css
+macro escapeCSS(String s)
+	$s.replace(;, \\3B\s).replace({, \\7B\s).replace(}, \\7D\s)
 end
 
-/// Convert name to html format
-/// @param s string
-/// @return string
-macro convertName(s)
-	$String($s).replace(([A-Z]), -%1, ?rich).lower()
+// Convert name to html format
+macro convertName(String s)
+	$s.replace(([A-Z]), -%1, ?rich).lower()
 end
 
-/// Handle custom types
-/// @param x any
-/// @return string
+// Handle custom types
 macro getType(x)
 	if type(x) == "table"
 		$(x.type? or "table")
@@ -32,14 +22,12 @@ macro getType(x)
 	end
 end
 
-/// New set of CSS rules
-/// @public
-/// @param ...props table
-///		* Notes on props:
-///			*	Values with numerics keys will be inserted as nested rules
-///			*	Values with string keys will be insterted as css property.
-///			*	Property names will be converted from `myCustomProperty` to `my-custom-property`
-/// @return table
+// New set of CSS rules
+// @param ...props table
+//		* Notes on props:
+//			*	Values with numerics keys will be inserted as nested rules
+//			*	Values with string keys will be insterted as css property.
+//			*	Property names will be converted from `myCustomProperty` to `my-custom-property`
 macro css(...props)
 	meta tostring: macro()
 		for name, value in items(props)
@@ -56,21 +44,16 @@ macro css(...props)
 	end
 end
 
-/// New set of CSS rules with a selector
-/// @public
-/// @param selector string
-/// @param ...props table (see css macro)
-/// @return table
+// New set of CSS rules with a selector
+// @param selector string
+// @param ...props table (see css macro)
 macro Rule(selector, ...props)
 	meta tostring: macro()
 		$selector {$css(...props)}
 	end
 end
 
-/// New CSS variable
-/// @public
-/// @param name string
-/// @return table
+// New CSS variable
 macro var(name)
 	type: cssVar
 	meta tostring: macro()
