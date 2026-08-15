@@ -2,6 +2,6 @@ plumeVersion: b61 (Owl Edition)
 name: css
 author: Erwan Barbedor
 description: CSS generator
-version: 0.1.3
+version: 0.2.0
 source: github.com/PlumeScript/css
 required: $empty
