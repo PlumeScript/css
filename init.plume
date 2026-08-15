@@ -48,8 +48,9 @@ end
 // @param selector string
 // @param ...props table (see css macro)
 macro Rule(selector, ...props)
+	...props
 	meta tostring: macro()
-		$selector {$css(...props)}
+		$selector {$css(...self)}
 	end
 end
 
