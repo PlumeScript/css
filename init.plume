@@ -65,3 +65,92 @@ end
 Rule: $Rule
 css: $css
 var: $var
+
+
+macro isUnit(x)
+	$ (type(x) == "table" and x.type? == "cssunit")
+end
+
+ref unit: macro(value, unitname, ?calc)
+	type: cssunit
+	value: $value
+	unit: $unitname
+	calc: $calc
+
+	meta add: macro(x, y)
+		if not isUnit(x) or not isUnit(y)
+			raise Cannot add "number" and "unit"
+		end
+
+		if x.unit == y.unit and type(x.value) == "number" and type(y.value) == "number"
+			return $ unit(x.value + y.value, x.unit)
+		else
+			return $unit($x.get() + $y.get(),,?calc)
+		end
+	end
+
+	meta sub: macro(x, y)
+		if not isUnit(x) or not isUnit(y)
+			raise Cannot sub "number" and "unit"
+		end
+
+		if x.unit == y.unit and type(x.value) == "number" and type(y.value) == "number"
+			return $ unit(x.value - y.value, x.unit)
+		else
+			return $unit($x.get() - ($y.get()),,?calc)
+		end
+	end
+
+	meta mul: macro(x, y)
+		if not isUnit(x)
+			if type(x) == "number" or x.isNumber()
+				return $ unit(x, self.unit) * y
+			else
+				raise Unsuported type "$type($x)"
+			end
+		end
+		if not isUnit(y)
+			if type(y) == "number" or y.isNumber()
+				return $ x * unit(y, self.unit)
+			else
+				raise Unsuported type "$type($y)"
+			end
+		end
+
+		if x.unit == y.unit and type(x.value) == "number" and type(y.value) == "number"
+			return $ unit(x.value * y.value, x.unit)
+		else
+			return $unit(($x.get()) * ($y.get()),,?calc)
+		end
+	end
+
+	meta div: macro(x, y)
+		if not isUnit(x)
+			if type(x) == "number" or x.isNumber()
+				return $ unit(x, self.unit) / y
+			else
+				raise Unsuported type "$type($x)"
+			end
+		end
+		if not isUnit(y)
+			raise Cannot divide a "number" by an "unit".
+		end
+
+		if x.unit == y.unit and type(x.value) == "number" and type(y.value) == "number"
+			return $ unit(x.value / y.value, x.unit)
+		else
+			return $unit(($x.get()) / ($y.get()),,?calc)
+		end
+	end
+
+	meta tostring: macro()
+		if calc
+			calc($self.value)
+		else
+			$self.value$self.unit
+		end
+	end
+	get: macro()
+		$self.value$self.unit
+	end
+end
