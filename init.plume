@@ -29,17 +29,15 @@ end
 //			*	Values with string keys will be insterted as css property.
 //			*	Property names will be converted from `myCustomProperty` to `my-custom-property`
 macro css(...props)
-	meta tostring: macro()
-		for name, value in items(props)
-			if getType(value) == "cssVar"
-				set value = var($value)
-			end
+	for name, value in items(props)
+		if getType(value) == "cssVar"
+			set value = var($value)
+		end
 
-			if type(name) == "number"
-				$value
-			else
-				$escapeCSS($convertName($name))\: $escapeCSS($value);
-			end
+		if type(name) == "number"
+			$value
+		else
+			$escapeCSS($convertName($name))\: $escapeCSS($value);
 		end
 	end
 end
